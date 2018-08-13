@@ -8,6 +8,7 @@ resource "google_compute_subnetwork" "management-1-subnet" {
   ip_cidr_range = "${var.management_1_cidr}"
   network       = "${google_compute_network.pcf-network.self_link}"
   region        = "${var.region}"
+  private_ip_google_access = true
 }
 
 resource "google_compute_subnetwork" "management-2-subnet" {
@@ -15,6 +16,7 @@ resource "google_compute_subnetwork" "management-2-subnet" {
   ip_cidr_range = "${var.management_2_cidr}"
   network       = "${google_compute_network.pcf-network.self_link}"
   region        = "${var.region}"
+  private_ip_google_access = true
 }
 
 resource "google_compute_subnetwork" "management-3-subnet" {
@@ -22,6 +24,7 @@ resource "google_compute_subnetwork" "management-3-subnet" {
   ip_cidr_range = "${var.management_3_cidr}"
   network       = "${google_compute_network.pcf-network.self_link}"
   region        = "${var.region}"
+  private_ip_google_access = true
 }
 
 resource "google_compute_subnetwork" "pas-1-subnet" {
