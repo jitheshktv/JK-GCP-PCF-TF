@@ -71,7 +71,8 @@ resource "google_compute_firewall" "cf-internal-egress" {
 }
 
 // Allow OpsMgr and BOSH Director to talk to GCP APIs, e.g. googleapis.com
-resource "google_compute_firewall" "cf-allow-external-egress" {
+// commenting the below after enabling private google access
+/*  resource "google_compute_firewall" "cf-allow-external-egress" {
   count = "${var.internetless ? 1 : 0}"
 
   name    = "${var.env_name}-cf-allow-external-egress"
@@ -93,11 +94,10 @@ resource "google_compute_firewall" "cf-allow-external-egress" {
     protocol = "udp"
   }
 
-//  target_service_accounts = ["${google_service_account.opsman_service_account.email}"]
   target_service_accounts = ["${var.opsman_service_account_email}"]
 
   destination_ranges = ["0.0.0.0/0"]
-}
+} */
 
 // Deny all outbound internet traffic
 resource "google_compute_firewall" "cf-deny-external-egress" {
