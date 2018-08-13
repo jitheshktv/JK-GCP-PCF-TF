@@ -174,14 +174,6 @@ output "services_subnets" {
   value = "${module.network.services_subnets}"
 }
 
-output "ops_manager_public_ip" {
-  value = "${module.compute.ops_manager_public_ip}"
-}
-
-output "ops_manager_ip" {
-  value = "${module.compute.ops_manager_ip}"
-}
-
 output "vm_tag" {
   value = "${module.compute.vm_tag}"
 }

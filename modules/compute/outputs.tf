@@ -2,14 +2,6 @@ output "iaas" {
   value = "gcp"
 }
 
-output "ops_manager_public_ip" {
-  value = "${google_compute_address.ops-manager-ip.address}"
-}
-
-output "ops_manager_ip" {
-  value = "${google_compute_address.ops-manager-ip.address}"
-}
-
 output "project" {
   value = "${var.project}"
 }
