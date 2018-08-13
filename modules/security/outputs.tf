@@ -1,0 +1,3 @@
+output "iaas" {
+  value = "gcp"
+}
