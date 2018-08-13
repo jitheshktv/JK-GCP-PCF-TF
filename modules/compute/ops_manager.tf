@@ -10,9 +10,9 @@ resource "google_compute_image" "ops-manager-image" {
   }
 }
 
-resource "google_compute_address" "ops-manager-ip" {
-  name = "${var.env_name}-ops-manager-ip"
-}
+//resource "google_compute_address" "ops-manager-ip" {
+//  name = "${var.env_name}-ops-manager-ip"
+//}
 
 resource "google_compute_instance" "ops-manager" {
   name         = "${var.env_name}-ops-manager"
@@ -34,9 +34,9 @@ resource "google_compute_instance" "ops-manager" {
   network_interface {
     subnetwork = "${var.env_name}-management-1-subnet"
 
-    access_config {
-      nat_ip = "${google_compute_address.ops-manager-ip.address}"
-    }
+    //access_config {
+    //  nat_ip = "${google_compute_address.ops-manager-ip.address}"
+    //}
   }
 
   service_account {
