@@ -10,6 +10,7 @@
 
  resource "google_compute_address" "cf" {
    name = "${var.env_name}-cf"
+   address_type = "INTERNAL"
 
    count = "${var.global_lb > 0 ? 0 : 1}"
  }
@@ -148,6 +149,7 @@
 
 resource "google_compute_address" "cf-ssh" {
   name = "${var.env_name}-cf-ssh"
+  address_type = "INTERNAL"
 }
 
 resource "google_compute_target_pool" "cf-ssh" {
