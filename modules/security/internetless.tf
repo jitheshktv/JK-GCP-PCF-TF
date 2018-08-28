@@ -3,7 +3,7 @@ resource "google_compute_firewall" "cf-internal-ingress" {
   count = "${var.internetless ? 1 : 0}"
 
   name    = "${var.env_name}-cf-internal-ingress"
-  network = "${var.env_name}-${var.network_name}"
+  network = "${var.network_name}"
 
   priority = 900
 
@@ -39,7 +39,7 @@ resource "google_compute_firewall" "cf-internal-egress" {
   count = "${var.internetless ? 1 : 0}"
 
   name    = "${var.env_name}-cf-internal-egress"
-  network = "${var.env_name}-${var.network_name}"
+  network = "${var.network_name}"
 
   priority = 1000
 
@@ -76,7 +76,7 @@ resource "google_compute_firewall" "cf-internal-egress" {
   count = "${var.internetless ? 1 : 0}"
 
   name    = "${var.env_name}-cf-allow-external-egress"
-  network = "${var.env_name}-${var.network_name}"
+  network = "${var.network_name}"
 
   priority = 1100
 
@@ -104,7 +104,7 @@ resource "google_compute_firewall" "cf-deny-external-egress" {
   count = "${var.internetless ? 1 : 0}"
 
   name    = "${var.env_name}-cf-deny-external-egress"
-  network = "${var.env_name}-${var.network_name}"
+  network = "${var.network_name}"
 
   priority = 1200
 

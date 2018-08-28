@@ -4,7 +4,7 @@
 
 resource "google_compute_firewall" "cf-public" {
   name    = "${var.env_name}-cf-public"
-  network = "${var.env_name}-${var.network_name}"
+  network = "${var.network_name}"
 
   allow {
     protocol = "tcp"
@@ -16,7 +16,7 @@ resource "google_compute_firewall" "cf-public" {
 
 resource "google_compute_firewall" "cf-health_check" {
   name    = "${var.env_name}-cf-health-check"
-  network = "${var.env_name}-${var.network_name}"
+  network = "${var.network_name}"
 
   allow {
     protocol = "tcp"
@@ -33,7 +33,7 @@ resource "google_compute_firewall" "cf-health_check" {
 
 resource "google_compute_firewall" "cf-ssh" {
   name    = "${var.env_name}-cf-ssh"
-  network = "${var.env_name}-${var.network_name}"
+  network = "${var.network_name}"
 
   allow {
     protocol = "tcp"

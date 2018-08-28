@@ -40,7 +40,8 @@ module "security" {
   source = "./modules/security"
 
   env_name    = "${var.env_name}"
-  network_name = "${var.network_name}"
+  //network_name = "${var.network_name}"
+  network_name = "${module.network.network_name}"
   management_1_cidr = "${var.management_1_cidr}"
   management_2_cidr = "${var.management_2_cidr}"
   management_3_cidr = "${var.management_3_cidr}"
