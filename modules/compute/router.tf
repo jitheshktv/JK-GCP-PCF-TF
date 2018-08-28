@@ -10,7 +10,7 @@
 
  resource "google_compute_address" "cf" {
    name = "${var.env_name}-cf"
-   address_type = "INTERNAL"
+   //address_type = "INTERNAL"
 
    count = "${var.global_lb > 0 ? 0 : 1}"
  }
