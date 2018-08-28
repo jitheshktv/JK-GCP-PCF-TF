@@ -50,3 +50,9 @@ variable "internetless" {
   description = "When set to true, all traffic going outside the 10.* network is denied."
   default     = true
 }
+
+variable "global_lb" {
+  description = "Use global load balancers for CF instead of regional load balancers"
+  default     = 0
+}
+

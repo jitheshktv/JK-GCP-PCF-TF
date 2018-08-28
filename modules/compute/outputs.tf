@@ -61,27 +61,16 @@ output "ops_manager_ssh_public_key" {
 }
 
 output "pcf.domainName" {
-  value     = "${google_compute_address.ops-manager-ip.address}"
+  //value     = "${google_compute_address.ops-manager-ip.address}"
+  value     = "${google_compute_instance.ops-manager.network_interface.0.address}"
 }
 
 output "wildcard.sys.domainName" {
   value     = "${var.internetless ? local.haproxy_static_ip : local.cf_address}"
 }
 
-output "doppler.sys.domainName" {
-  value     = "${var.internetless ? local.haproxy_static_ip : google_compute_address.cf-ws.address}"
-}
-
-output "loggregator.sys.domainName" {
-  value     = "${var.internetless ? local.haproxy_static_ip : google_compute_address.cf-ws.address}"
-}
-
 output "wildcard.apps.domainName" {
   value     = "${var.internetless ? local.haproxy_static_ip : local.cf_address}"
-}
-
-output "wildcard.ws.domainName" {
-  value     = "${var.internetless ? local.haproxy_static_ip : google_compute_address.cf-ws.address}"
 }
 
 output "ssh.sys.domainName" {

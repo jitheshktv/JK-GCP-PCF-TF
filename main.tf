@@ -1,3 +1,20 @@
+module "network" {
+  source = "./modules/network"
+
+  env_name    = "${var.env_name}"
+  network_name = "${var.network_name}"
+  region      = "${var.region}"
+  management_1_cidr = "${var.management_1_cidr}"
+  management_2_cidr = "${var.management_2_cidr}"
+  management_3_cidr = "${var.management_3_cidr}"
+  pas_1_cidr = "${var.pas_1_cidr}"
+  pas_2_cidr = "${var.pas_2_cidr}"
+  pas_3_cidr = "${var.pas_3_cidr}"
+  services_1_cidr = "${var.services_1_cidr}"
+  services_2_cidr = "${var.services_2_cidr}"
+  services_3_cidr = "${var.services_3_cidr}"
+}
+
 module "iam" {
   source = "./modules/iam"
 
@@ -17,23 +34,6 @@ module "storage" {
   region      = "${var.region}"
   project     = "${var.project}"
 
-}
-
-module "network" {
-  source = "./modules/network"
-
-  env_name    = "${var.env_name}"
-  network_name = "${var.network_name}"
-  region      = "${var.region}"
-  management_1_cidr = "${var.management_1_cidr}"
-  management_2_cidr = "${var.management_2_cidr}"
-  management_3_cidr = "${var.management_3_cidr}"
-  pas_1_cidr = "${var.pas_1_cidr}"
-  pas_2_cidr = "${var.pas_2_cidr}"
-  pas_3_cidr = "${var.pas_3_cidr}"
-  services_1_cidr = "${var.services_1_cidr}"
-  services_2_cidr = "${var.services_2_cidr}"
-  services_3_cidr = "${var.services_3_cidr}"
 }
 
 module "security" {

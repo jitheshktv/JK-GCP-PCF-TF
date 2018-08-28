@@ -215,29 +215,17 @@ output "ops_manager_ssh_public_key" {
 }
 
 output "pcf.domainName" {
-  value     = "${module.network.pcf.domainName}"
+  value     = "${module.compute.pcf.domainName}"
 }
 
 output "wildcard.sys.domainName" {
-  value     = "${module.network.wildcard.sys.domainName}"
-}
-
-output "doppler.sys.domainName" {
-  value     = "${module.network.doppler.sys.domainName}"
-}
-
-output "loggregator.sys.domainName" {
-  value     = "${module.network.loggregator.sys.domainName}"
+  value     = "${module.compute.wildcard.sys.domainName}"
 }
 
 output "wildcard.apps.domainName" {
-  value     = "${module.network.wildcard.apps.domainName}"
-}
-
-output "wildcard.ws.domainName" {
-  value     = "${module.network.wildcard.ws.domainName}"
+  value     = "${module.compute.wildcard.apps.domainName}"
 }
 
 output "ssh.sys.domainName" {
-  value     = "${module.network.ssh.sys.domainName}"
+  value     = "${module.compute.ssh.sys.domainName}"
 }
