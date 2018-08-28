@@ -39,3 +39,14 @@ variable "ssl_private_key" {
   description = "The contents of an SSL private key to be used by the LB, optional if `ssl_ca_cert` is provided"
   default     = ""
 }
+
+variable "pas_1_cidr" {
+  type        = "string"
+  description = "cidr for pas subnet on zone 1"
+  default     = "10.119.50.0/25"
+}
+
+variable "internetless" {
+  description = "When set to true, all traffic going outside the 10.* network is denied."
+  default     = true
+}

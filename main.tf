@@ -66,4 +66,6 @@ module "compute" {
   opsman_machine_type = "${var.opsman_machine_type}"
   ssl_cert = "${var.ssl_cert}"
   ssl_private_key = "${var.ssl_private_key}"
+  pas_1_cidr = "${var.pas_1_cidr}"
+  internetless = "${var.internetless}"
 }

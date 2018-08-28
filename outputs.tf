@@ -213,3 +213,31 @@ output "ops_manager_ssh_public_key" {
   sensitive = true
   value     = "${module.compute.ops_manager_ssh_public_key}"
 }
+
+output "pcf.domainName" {
+  value     = "${module.network.pcf.domainName}"
+}
+
+output "wildcard.sys.domainName" {
+  value     = "${module.network.wildcard.sys.domainName}"
+}
+
+output "doppler.sys.domainName" {
+  value     = "${module.network.doppler.sys.domainName}"
+}
+
+output "loggregator.sys.domainName" {
+  value     = "${module.network.loggregator.sys.domainName}"
+}
+
+output "wildcard.apps.domainName" {
+  value     = "${module.network.wildcard.apps.domainName}"
+}
+
+output "wildcard.ws.domainName" {
+  value     = "${module.network.wildcard.ws.domainName}"
+}
+
+output "ssh.sys.domainName" {
+  value     = "${module.network.ssh.sys.domainName}"
+}

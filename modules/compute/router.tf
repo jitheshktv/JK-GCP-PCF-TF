@@ -2,93 +2,145 @@
  * PAS LB *
  **********/
 
-resource "google_compute_global_address" "cf" {
-  name = "${var.env_name}-cf"
-}
+ resource "google_compute_global_address" "cf" {
+   name = "${var.env_name}-cf"
 
-resource "google_compute_instance_group" "httplb" {
-  // Count based on number of AZs
-  count       = 3
-  name        = "${var.env_name}-httpslb-${element(var.zones, count.index)}"
-  description = "terraform generated instance group that is multi-zone for https loadbalancing"
-  zone        = "${element(var.zones, count.index)}"
-}
+   count = "${var.global_lb}"
+ }
 
-resource "google_compute_http_health_check" "cf-public" {
-  name                = "${var.env_name}-cf-public"
-  port                = 8080
-  request_path        = "/health"
-  check_interval_sec  = 5
-  timeout_sec         = 3
-  healthy_threshold   = 6
-  unhealthy_threshold = 3
-}
+ resource "google_compute_address" "cf" {
+   name = "${var.env_name}-cf"
 
-resource "google_compute_backend_service" "http_lb_backend_service" {
-  name        = "${var.env_name}-httpslb"
-  port_name   = "http"
-  protocol    = "HTTP"
-  timeout_sec = 900
-  enable_cdn  = false
+   count = "${var.global_lb > 0 ? 0 : 1}"
+ }
 
-  backend {
-    group = "${google_compute_instance_group.httplb.0.self_link}"
-  }
+ resource "google_compute_instance_group" "httplb" {
+   // Count based on number of AZs
+   count       = "${var.global_lb > 0 ? 3 : 0}"
+   name        = "${var.env_name}-httpslb-${element(var.zones, count.index)}"
+   description = "terraform generated instance group that is multi-zone for https loadbalancing"
+   zone        = "${element(var.zones, count.index)}"
+ }
 
-  backend {
-    group = "${google_compute_instance_group.httplb.1.self_link}"
-  }
+ resource "google_compute_http_health_check" "cf-public" {
+   name                = "${var.env_name}-cf-public"
+   port                = 8080
+   request_path        = "/health"
+   check_interval_sec  = 5
+   timeout_sec         = 3
+   healthy_threshold   = 6
+   unhealthy_threshold = 3
+ }
 
-  backend {
-    group = "${google_compute_instance_group.httplb.2.self_link}"
-  }
+ resource "google_compute_backend_service" "http_lb_backend_service" {
+   name        = "${var.env_name}-httpslb"
+   port_name   = "http"
+   protocol    = "HTTP"
+   timeout_sec = 900
+   enable_cdn  = false
 
-  health_checks = ["${google_compute_http_health_check.cf-public.self_link}"]
-}
+   backend {
+     group = "${google_compute_instance_group.httplb.0.self_link}"
+   }
 
-resource "google_compute_url_map" "https_lb_url_map" {
-  name = "${var.env_name}-cf-http"
+   backend {
+     group = "${google_compute_instance_group.httplb.1.self_link}"
+   }
 
-  default_service = "${google_compute_backend_service.http_lb_backend_service.self_link}"
-}
+   backend {
+     group = "${google_compute_instance_group.httplb.2.self_link}"
+   }
 
-resource "google_compute_target_http_proxy" "http_lb_proxy" {
-  name        = "${var.env_name}-httpproxy"
-  description = "really a load balancer but listed as an https proxy"
-  url_map     = "${google_compute_url_map.https_lb_url_map.self_link}"
-}
+   health_checks = ["${google_compute_http_health_check.cf-public.self_link}"]
 
-resource "google_compute_target_https_proxy" "https_lb_proxy" {
-  name             = "${var.env_name}-httpsproxy"
-  description      = "really a load balancer but listed as an https proxy"
-  url_map          = "${google_compute_url_map.https_lb_url_map.self_link}"
-  ssl_certificates = ["${google_compute_ssl_certificate.cert.self_link}"]
-}
+   count = "${var.global_lb}"
+ }
 
-resource "google_compute_ssl_certificate" "cert" {
-  name        = "${var.env_name}-lbcert"
-  description = "user provided ssl private key / ssl certificate pair"
-  certificate = "${var.ssl_cert}"
-  private_key = "${var.ssl_private_key}"
+ resource "google_compute_url_map" "https_lb_url_map" {
+   name = "${var.env_name}-cf-http"
 
-  lifecycle = {
-    create_before_destroy = true
-  }
-}
+   default_service = "${google_compute_backend_service.http_lb_backend_service.self_link}"
 
-resource "google_compute_global_forwarding_rule" "cf-http" {
-  name       = "${var.env_name}-cf-lb-http"
-  ip_address = "${google_compute_global_address.cf.address}"
-  target     = "${google_compute_target_http_proxy.http_lb_proxy.self_link}"
-  port_range = "80"
-}
+   count = "${var.global_lb}"
+ }
 
-resource "google_compute_global_forwarding_rule" "cf-https" {
-  name       = "${var.env_name}-cf-lb-https"
-  ip_address = "${google_compute_global_address.cf.address}"
-  target     = "${google_compute_target_https_proxy.https_lb_proxy.self_link}"
-  port_range = "443"
-}
+ resource "google_compute_target_http_proxy" "http_lb_proxy" {
+   name        = "${var.env_name}-httpproxy"
+   description = "really a load balancer but listed as an https proxy"
+   url_map     = "${google_compute_url_map.https_lb_url_map.self_link}"
+
+   count = "${var.global_lb}"
+ }
+
+ resource "google_compute_target_https_proxy" "https_lb_proxy" {
+   name             = "${var.env_name}-httpsproxy"
+   description      = "really a load balancer but listed as an https proxy"
+   url_map          = "${google_compute_url_map.https_lb_url_map.self_link}"
+   ssl_certificates = ["${google_compute_ssl_certificate.cert.self_link}"]
+
+   count = "${var.global_lb}"
+ }
+
+ resource "google_compute_ssl_certificate" "cert" {
+   name_prefix = "${var.env_name}-lbcert-"
+   description = "user provided ssl private key / ssl certificate pair"
+   certificate = "${var.ssl_cert}"
+   private_key = "${var.ssl_private_key}"
+
+   lifecycle = {
+     create_before_destroy = true
+   }
+
+   count = "${var.global_lb}"
+ }
+
+ resource "google_compute_target_pool" "cf" {
+   name = "${var.env_name}-lb"
+
+   health_checks = [
+     "${google_compute_http_health_check.cf-public.name}",
+   ]
+
+   count = "${var.global_lb > 0 ? 0 : 1}"
+ }
+
+ resource "google_compute_global_forwarding_rule" "cf-http" {
+   name       = "${var.env_name}-cf-lb-http"
+   ip_address = "${google_compute_global_address.cf.address}"
+   target     = "${google_compute_target_http_proxy.http_lb_proxy.self_link}"
+   port_range = "80"
+
+   count = "${var.global_lb}"
+ }
+
+ resource "google_compute_forwarding_rule" "cf-http" {
+   name       = "${var.env_name}-cf-lb-http"
+   ip_address = "${google_compute_address.cf.address}"
+   target     = "${google_compute_target_pool.cf.self_link}"
+   port_range = "80"
+   ip_protocol = "TCP"
+
+   count = "${var.global_lb > 0 ? 0 : 1}"
+ }
+
+ resource "google_compute_global_forwarding_rule" "cf-https" {
+   name       = "${var.env_name}-cf-lb-https"
+   ip_address = "${google_compute_global_address.cf.address}"
+   target     = "${google_compute_target_https_proxy.https_lb_proxy.self_link}"
+   port_range = "443"
+
+   count = "${var.global_lb}"
+ }
+
+ resource "google_compute_forwarding_rule" "cf-https" {
+   name       = "${var.env_name}-cf-lb-https"
+   ip_address = "${google_compute_address.cf.address}"
+   target     = "${google_compute_target_pool.cf.self_link}"
+   port_range = "443"
+   ip_protocol = "TCP"
+
+   count = "${var.global_lb > 0 ? 0 : 1}"
+ }
 
 /****************
  * Diego SSH LB *
