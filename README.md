@@ -1,6 +1,6 @@
 # How Does One Use This?
 
-checkout the project. Edit terraform.tfvars file with your project specefic variables. Edit the variables.tf with your requirement specefic variables values and execute the terraform template. You will also need a file with the "service_account_key" which you need to pass as a "-var-file" or append it to the terraform.tfvars file.
+checkout the project. Edit terraform.tfvars file with your project specefic variables. Edit the variables.tf with your requirement specefic variables values and execute the terraform template. You will also need a file with the "service_account_key" (eg: service_account_key.tfvars) which you need to pass as a "-var-file" or append it to the terraform.tfvars file.
 
 ## What Does This Do?
 
@@ -87,12 +87,12 @@ Note: please make sure you have created the `terraform.tfvars` file above as men
 
 ```bash
 terraform init
-terraform plan -out=plan
-terraform apply plan
+terraform plan [--var-file=./service_account_key.tfvars] -out=plan
+terraform apply plan OR terraform apply [--var-file=./service_account_key.tfvars]
 ```
 
 ### Tearing down environment
 
 ```bash
-terraform destroy
+terraform destroy [--var-file=./service_account_key.tfvars]
 ```
