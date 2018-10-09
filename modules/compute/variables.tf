@@ -56,3 +56,10 @@ variable "global_lb" {
   default     = 0
 }
 
+variable "network_name" {
+  type = "string"
+}
+
+variable "management_subnet_1_name" {
+  type        = "string"
+}

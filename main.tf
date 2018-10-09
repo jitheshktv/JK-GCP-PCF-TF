@@ -69,4 +69,6 @@ module "compute" {
   ssl_private_key = "${var.ssl_private_key}"
   pas_1_cidr = "${var.pas_1_cidr}"
   internetless = "${var.internetless}"
+  network_name = "${module.network.network_name}"
+  management_subnet_1_name = "${module.network.management_1_subnet_name}"
 }
