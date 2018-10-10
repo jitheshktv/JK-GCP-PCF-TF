@@ -24,26 +24,24 @@
    unhealthy_threshold = 3
    tcp_health_check {
      port           = 8080
-     request_path   = "/health"
    }
  }
 
  resource "google_compute_region_backend_service" "pas_lb_backend_service" {
    name        = "${var.env_name}-pas-lb-backend-svc"
-   port_name   = "http"
    protocol    = "HTTP"
    timeout_sec = 900
 
    backend {
-     group = "${google_compute_region_instance_group.pas_lb.0.self_link}"
+     group = "${google_compute_instance_group.pas_lb.0.self_link}"
    }
 
    backend {
-     group = "${google_compute_region_instance_group.pas_lb.1.self_link}"
+     group = "${google_compute_instance_group.pas_lb.1.self_link}"
    }
 
    backend {
-     group = "${google_compute_region_instance_group.pas_lb.2.self_link}"
+     group = "${google_compute_instance_group.pas_lb.2.self_link}"
    }
 
    health_checks = ["${google_compute_health_check.pas_lb_healthcheck.self_link}"]
@@ -66,7 +64,7 @@
    ip_address             = "${google_compute_address.cf.address}"
    network                = "${var.network_name}"
    subnetwork             = "${var.management_subnet_1_name}"
-   backend_service        = "${google_compute_region_backend_service.my-int-lb.self_link}"
+   backend_service        = "${google_compute_region_backend_service.pas_lb_backend_service.self_link}"
    port_range             = "80"
    ip_protocol            = "TCP"
  }
@@ -77,7 +75,7 @@
    ip_address             = "${google_compute_address.cf.address}"
    network                = "${var.network_name}"
    subnetwork             = "${var.management_subnet_1_name}"
-   backend_service        = "${google_compute_region_backend_service.my-int-lb.self_link}"
+   backend_service        = "${google_compute_region_backend_service.pas_lb_backend_service.self_link}"
    port_range             = "443"
    ip_protocol            = "TCP"
  }
