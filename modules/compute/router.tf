@@ -14,6 +14,7 @@
    name        = "${var.env_name}-httpslb-${element(var.zones, count.index)}"
    description = "terraform generated instance group that is multi-zone for loadbalancing"
    zone        = "${element(var.zones, count.index)}"
+   network     = "${var.network_name}"
  }
 
  resource "google_compute_health_check" "pas_lb_healthcheck" {
@@ -29,7 +30,7 @@
 
  resource "google_compute_region_backend_service" "pas_lb_backend_service" {
    name        = "${var.env_name}-pas-lb-backend-svc"
-   protocol    = "HTTP"
+   protocol    = "TCP"
    timeout_sec = 900
 
    backend {
